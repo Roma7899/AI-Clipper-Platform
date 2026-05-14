@@ -29,31 +29,39 @@ async def submit_video(
     subtitle_language: str = Form("ar"),
     user_id: str = Form(...) # In a real app, this would come from auth
 ):
+    print(f"Starting submission for user: {user_id}, platform: {platform}, url: {url}")
     video_id = str(uuid.uuid4())
     job_id = str(uuid.uuid4())
     
-    # Create initial records in Supabase
-    supabase.table("videos").insert({
-        "id": video_id,
-        "user_id": user_id,
-        "original_url": url,
-        "status": "pending"
-    }).execute()
-    
-    supabase.table("jobs").insert({
-        "id": job_id,
-        "video_id": video_id,
-        "user_id": user_id,
-        "status": "pending",
-        "progress": 0
-    }).execute()
-    
-    background_tasks.add_task(
-        process_video_pipeline, 
-        video_id, job_id, url, platform, subtitle_language, user_id
-    )
-    
-    return {"job_id": job_id, "video_id": video_id, "status": "pending"}
+    try:
+        # Create initial records in Supabase
+        print(f"Creating Supabase records for job: {job_id}")
+        supabase.table("videos").insert({
+            "id": video_id,
+            "user_id": user_id,
+            "original_url": url,
+            "status": "pending"
+        }).execute()
+        
+        supabase.table("jobs").insert({
+            "id": job_id,
+            "video_id": video_id,
+            "user_id": user_id,
+            "status": "pending",
+            "progress": 0
+        }).execute()
+        print("Supabase records created successfully")
+        
+        background_tasks.add_task(
+            process_video_pipeline, 
+            video_id, job_id, url, platform, subtitle_language, user_id
+        )
+        print("Background task queued")
+        
+        return {"job_id": job_id, "video_id": video_id, "status": "pending"}
+    except Exception as e:
+        print(f"Error in submit_video: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/status/{job_id}")
 async def get_status(job_id: str):
