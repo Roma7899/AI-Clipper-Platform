@@ -17,11 +17,7 @@ export const submitVideo = async (data: { url?: string; file?: File; platform: s
   formData.append('subtitle_language', data.subtitle_language)
   formData.append('user_id', data.user_id)
 
-  const response = await api.post('/api/videos/submit', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  })
+  const response = await api.post('/api/videos/submit', formData)
   return response.data
 }
 
