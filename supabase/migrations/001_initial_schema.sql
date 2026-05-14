@@ -1,3 +1,5 @@
+-- ALTER TABLE videos ALTER COLUMN user_id DROP NOT NULL;
+
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

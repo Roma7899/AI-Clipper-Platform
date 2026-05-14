@@ -27,7 +27,7 @@ async def submit_video(
     url: Optional[str] = Form(None),
     platform: str = Form("TikTok"),
     subtitle_language: str = Form("ar"),
-    user_id: str = Form(...) # In a real app, this would come from auth
+    user_id: Optional[str] = Form(None) # Optional
 ):
     print(f"Starting submission for user: {user_id}, platform: {platform}, url: {url}")
     video_id = str(uuid.uuid4())
@@ -38,7 +38,7 @@ async def submit_video(
         print(f"Creating Supabase records for job: {job_id}")
         supabase.table("videos").insert({
             "id": video_id,
-            "user_id": user_id,
+            "user_id": user_id, # Can be None/NULL
             "original_url": url,
             "status": "pending"
         }).execute()
@@ -46,7 +46,7 @@ async def submit_video(
         supabase.table("jobs").insert({
             "id": job_id,
             "video_id": video_id,
-            "user_id": user_id,
+            "user_id": user_id, # Can be None/NULL
             "status": "pending",
             "progress": 0
         }).execute()
