@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { useTranslation } from "@/hooks/useTranslation"
 import { Button } from "./ui/button"
-import { Youtube, Upload, Link as LinkIcon } from "lucide-react"
+import { Video, Upload, Link as LinkIcon } from "lucide-react"
 
 interface VideoUploaderProps {
   onUpload: (data: { url?: string; file?: File; platform: string; subtitle_language: string }) => void
@@ -28,7 +28,7 @@ export const VideoUploader = ({ onUpload, isUploading }: VideoUploaderProps) => 
           onClick={() => setActiveTab('url')}
           className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 border transition-all ${activeTab === 'url' ? 'bg-accent border-accent' : 'bg-[#12121a] border-gray-800'}`}
         >
-          <Youtube size={20} />
+          <Video size={20} />
           {t.process.url_tab}
         </button>
         <button

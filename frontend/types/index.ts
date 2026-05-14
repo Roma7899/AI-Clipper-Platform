@@ -43,4 +43,5 @@ export interface JobStatus {
   steps_completed: string[]
   excel_url?: string
   total_clips: number
+  error_message?: string
 }
