@@ -25,7 +25,7 @@ export default function ProcessPage() {
       // For demo purposes, we'll use a hardcoded user_id
       const res = await submitVideo({ ...data, user_id: "00000000-0000-0000-0000-000000000000" })
       setJobId(res.job_id)
-    } catch (error: any) {
+    } catch (error) {
       console.error("Upload error:", error)
       alert("Error: " + error.message)
     } finally {
